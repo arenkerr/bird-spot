@@ -9,9 +9,30 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import * as firebase from 'firebase';
 
 export default class HomeScreen extends Component {
+  constructor() {
+    super();
+    this.state = { currentUser: null };
+    this.userOnState.bind(this);
+  }
+
+  componentDidMount() {
+    this.userOnState();
+  }
+
+  userOnState = async () => {
+    try {
+      const { currentUser } = await firebase.auth();
+      this.setState({ currentUser });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   render() {
+    const user = this.state.currentUser;
     return (
       <View style={styles.container}>
         <ScrollView
@@ -32,7 +53,9 @@ export default class HomeScreen extends Component {
           <View style={styles.getStartedContainer}>
             <DevelopmentModeNotice />
 
-            <Text style={styles.getStartedText}>HELLO WORLD</Text>
+            {user && (
+              <Text style={styles.getStartedText}>HELLO {user.email}</Text>
+            )}
           </View>
         </ScrollView>
 

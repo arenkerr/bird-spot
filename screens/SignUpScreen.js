@@ -24,29 +24,17 @@ export default class SignUpScreen extends Component {
 
   handleSignUp = async () => {
     try {
-      await firebase
+      const user = await firebase
         .auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password);
       console.log('Account created');
-      // this.createUser(User)
+      // also create them in Users db?
+      this.props.navigation.navigate(user ? 'HomeScreen' : 'SignUp');
     } catch (error) {
       console.log(error);
       this.setState({ errorMessage: error });
     }
   };
-
-  // createUser = async userObject => {
-  //   try {
-  //     const docRef = await this.$store.getters.getDB.collection('users')
-  //     docRef
-  //     .doc(userObject.uid)
-  //     .set({
-  //       id: userObject.uid
-  //     })
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
 
   render() {
     return (
