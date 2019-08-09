@@ -12,21 +12,41 @@ import {
 import * as firebase from 'firebase';
 
 export default class SignUpScreen extends Component {
-  state = { email: '', password: '', errorMessage: null };
+  constructor() {
+    super();
+    this.state = { email: '', password: '', errorMessage: null };
+    this.handleSignUp.bind(this);
+  }
 
-  async handleSignUp() {
-    // firebase
+  componentDidMount() {
+    console.log('mounted');
+  }
+
+  handleSignUp = async () => {
     try {
       await firebase
         .auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password);
       console.log('Account created');
-      // Navigate to the Home page, the user is auto logged in
+      // this.createUser(User)
     } catch (error) {
       console.log(error);
       this.setState({ errorMessage: error });
     }
-  }
+  };
+
+  // createUser = async userObject => {
+  //   try {
+  //     const docRef = await this.$store.getters.getDB.collection('users')
+  //     docRef
+  //     .doc(userObject.uid)
+  //     .set({
+  //       id: userObject.uid
+  //     })
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   render() {
     return (
