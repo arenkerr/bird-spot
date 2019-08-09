@@ -1,9 +1,12 @@
 import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import SignUpScreen from '../screens/SignUpScreen';
-import MainTabNavigator from './MainTabNavigator';
-import UserAuth from './UserAuth';
 import HomeScreen from '../screens/HomeScreen';
+import LogInScreen from '../screens/LogInScreen';
+import MainTabNavigator from './MainTabNavigator';
+import NavigationMenu from './NavigationMenu';
+
+import UserAuth from './UserAuth';
 
 export default createAppContainer(
   createSwitchNavigator({
@@ -12,6 +15,7 @@ export default createAppContainer(
     // BirdMap,
     UserAuth,
     SignUpScreen,
-    HomeScreen: MainTabNavigator,
+    LogInScreen,
+    HomeScreen: NavigationMenu,
   })
 );

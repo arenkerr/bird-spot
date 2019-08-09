@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Button,
 } from 'react-native';
 import * as firebase from 'firebase';
 
@@ -54,8 +55,10 @@ export default class HomeScreen extends Component {
             <DevelopmentModeNotice />
 
             {user && (
-              <Text style={styles.getStartedText}>HELLO {user.email}</Text>
+              <Text style={styles.getStartedText}>Welcome, {user.email}</Text>
             )}
+
+            <Button title="Log Out" onPress={this.handleLogIn} />
           </View>
         </ScrollView>
 

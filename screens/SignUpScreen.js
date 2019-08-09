@@ -65,7 +65,7 @@ export default class SignUpScreen extends Component {
           <Button title="Sign Up" onPress={this.handleSignUp} />
           <Button
             title="Already have an account? Login"
-            onPress={() => this.props.navigation.navigate('Login')}
+            onPress={() => this.props.navigation.navigate('LogInScreen')}
           />
         </ScrollView>
       </View>
