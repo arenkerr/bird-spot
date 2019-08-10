@@ -9,6 +9,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import BirdMap from '../screens/BirdMap';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -34,14 +35,14 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
-const LinksStack = createStackNavigator(
+const MapStack = createStackNavigator(
   {
-    Links: LinksScreen,
+    Links: BirdMap,
   },
   config
 );
 
-LinksStack.navigationOptions = {
+MapStack.navigationOptions = {
   tabBarLabel: 'BirdMap',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -51,7 +52,7 @@ LinksStack.navigationOptions = {
   ),
 };
 
-LinksStack.path = '';
+MapStack.path = '';
 
 const SettingsStack = createStackNavigator(
   {
@@ -74,7 +75,7 @@ SettingsStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
-  LinksStack,
+  MapStack,
   SettingsStack,
 });
 

@@ -15,7 +15,6 @@ export class FirebaseWrapper {
       this._firebaseInstance = firebase.initializeApp(config);
       this._firestore = firebase.firestore();
       this.initialized = true;
-      console.log('Inititalized');
     } else {
       console.log('Already inititalized');
     }
@@ -44,7 +43,7 @@ export class FirebaseWrapper {
     try {
       await this._firestore
         .collection(collectionPath)
-        .orderBy('createdAt', 'desc')
+        // .orderBy('createdAt', 'desc')
         .onSnapshot(querySnapshot => {
           let container = [];
           querySnapshot.forEach(doc => {

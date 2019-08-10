@@ -3,7 +3,6 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import SignUpScreen from '../screens/SignUpScreen';
 import HomeScreen from '../screens/HomeScreen';
 import LogInScreen from '../screens/LogInScreen';
-import MainTabNavigator from './MainTabNavigator';
 import NavigationMenu from './NavigationMenu';
 
 import UserAuth from './UserAuth';
