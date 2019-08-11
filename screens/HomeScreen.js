@@ -9,11 +9,12 @@ import {
   Button,
 } from 'react-native';
 import * as firebase from 'firebase';
+import UserBirds from './UserBirds';
 
 export default class HomeScreen extends Component {
   constructor() {
     super();
-    this.state = { currentUser: null };
+    this.state = { currentUser: null, username: '' };
     this.userOnState.bind(this);
   }
 
@@ -38,15 +39,14 @@ export default class HomeScreen extends Component {
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
         >
-          <View style={styles.container}>
+          <View style={styles.topHome}>
             {user && (
               <Text style={styles.heading}>
                 Welcome, {user.email.split('@')[0]}
               </Text>
             )}
-
-            <Button title="Log Out" onPress={this.handleLogIn} />
           </View>
+          <UserBirds user={user} />
         </ScrollView>
       </View>
     );
@@ -61,8 +61,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    width: '100%',
   },
-
+  topHome: {
+    backgroundColor: '#22b573',
+    width: '100%',
+    padding: 40,
+  },
   contentContainer: {
     paddingTop: 30,
   },
@@ -74,7 +79,7 @@ const styles = StyleSheet.create({
     marginLeft: -10,
   },
   heading: {
-    color: '#22b573',
+    color: '#fff',
     fontSize: 32,
     margin: 10,
     textAlign: 'center',
