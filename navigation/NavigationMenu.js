@@ -7,13 +7,16 @@ import {
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import AddBirdScreen from '../screens/AddBirdScreen';
 import BirdMap from '../screens/BirdMap';
 
 const config = Platform.select({
-  web: { headerMode: 'screen' },
-  default: {},
+  web: { headerMode: 'none' },
+  default: { headerMode: 'none' },
+  headerMode: 'none',
+  navigationOptions: {
+    headerVisible: false,
+  },
 });
 
 const HomeStack = createStackNavigator(
@@ -31,6 +34,7 @@ HomeStack.navigationOptions = {
       name={Platform.OS === 'ios' ? `ios-home` : 'md-home'}
     />
   ),
+  tabBarOptions: { showLabel: false },
 };
 
 HomeStack.path = '';
@@ -50,18 +54,19 @@ MapStack.navigationOptions = {
       name={Platform.OS === 'ios' ? 'ios-navigate' : 'md-navigate'}
     />
   ),
+  tabBarOptions: { showLabel: false },
 };
 
 MapStack.path = '';
 
-const SettingsStack = createStackNavigator(
+const AddBirdStack = createStackNavigator(
   {
-    Settings: SettingsScreen,
+    AddBird: AddBirdScreen,
   },
   config
 );
 
-SettingsStack.navigationOptions = {
+AddBirdStack.navigationOptions = {
   tabBarLabel: 'AddBird',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -69,14 +74,15 @@ SettingsStack.navigationOptions = {
       name={Platform.OS === 'ios' ? 'ios-add-circle' : 'md-add-circle'}
     />
   ),
+  tabBarOptions: { showLabel: false },
 };
 
-SettingsStack.path = '';
+AddBirdStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   MapStack,
-  SettingsStack,
+  AddBirdStack,
 });
 
 tabNavigator.path = '';

@@ -4,17 +4,17 @@ import SignUpScreen from '../screens/SignUpScreen';
 import HomeScreen from '../screens/HomeScreen';
 import LogInScreen from '../screens/LogInScreen';
 import NavigationMenu from './NavigationMenu';
+import AddBirdScreen from '../screens/AddBirdScreen';
+import BirdMap from '../screens/BirdMap';
 
 import UserAuth from './UserAuth';
 
 export default createAppContainer(
   createSwitchNavigator({
-    // You could add another route here for authentication.
-    // Read more at https://reactnavigation.org/docs/en/auth-flow.html
-    // BirdMap,
     UserAuth,
     SignUpScreen,
     LogInScreen,
     HomeScreen: NavigationMenu,
+    AddBirdScreen,
   })
 );
