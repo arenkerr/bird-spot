@@ -9,9 +9,14 @@ import {
   TextInput,
   Switch,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import * as firebase from 'firebase';
 import { FirebaseWrapper } from '../firebase/firebase';
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
+import uuidv1 from 'uuid/v1';
 
 const db = FirebaseWrapper.GetInstance();
 
@@ -26,14 +31,19 @@ export default class BirdMap extends Component {
       speciesName: '',
       unknownSpecies: false,
       details: '',
+      image: null,
+      uploading: false,
+      uploadedImage: '',
     };
     this.getLocation.bind(this);
     this.userOnState.bind(this);
+    this.getPermissionAsync.bind(this);
   }
 
   componentDidMount() {
     this.getLocation();
     this.userOnState();
+    this.getPermissionAsync();
   }
 
   userOnState = async () => {
@@ -73,8 +83,11 @@ export default class BirdMap extends Component {
           unknownSpecies: this.state.unknownSpecies,
           details: this.state.details,
           username: username,
+          uploadedImage: this.state.uploadedImage,
         };
         const submitted = db.CreateNewDocument('/Markers', newMarker);
+        console.log(newMarker.uploadedImage);
+        submitted ? Alert.alert('Submitted!') : Alert.alert('Try again :>');
       } else {
         Alert.alert('Please wait while BirdSpot gets your location');
       }
@@ -89,10 +102,22 @@ export default class BirdMap extends Component {
     return (
       <ScrollView>
         {this.state.isLoading ? (
-          <Text>Loading Location</Text>
+          <View style={styles.loadingLocation}>
+            <Text style={styles.loadingText}>Getting location...</Text>
+          </View>
         ) : (
           <View>
-            {user && <Text style={styles.heading}>Add a Bird</Text>}
+            <Text style={styles.heading}>Add a Bird</Text>
+            <TouchableOpacity style={styles.btn} onPress={this._pickImage}>
+              <View>
+                <Text style={styles.btnTxt}>Select Photo</Text>
+              </View>
+            </TouchableOpacity>
+            {/** Display selected image */}
+            {this.state.image && (
+              <Image source={{ uri: this.state.image }} style={styles.image} />
+            )}
+
             <Switch
               style={styles.switch}
               onValueChange={() => this.setState({ unknownSpecies: true })}
@@ -121,7 +146,46 @@ export default class BirdMap extends Component {
       </ScrollView>
     );
   }
+
+  getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
+  };
+
+  _pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    if (!result.cancelled) {
+      this.setState({ image: result.uri });
+      const ext = this.state.image.split('.').pop(); // Extract image extension
+      const imageName = `${uuidv1()}.${ext}`; // Generate unique name
+      this.setState({ uploadedImage: imageName });
+      this.uploadImage(this.state.image, imageName);
+    }
+  };
+
+  uploadImage = async (uri, imageName) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+
+    var ref = firebase
+      .storage()
+      .ref()
+      .child('birds/' + imageName);
+    return ref.put(blob);
+  };
 }
+
+import Dimensions from 'Dimensions';
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   textInput: {
@@ -156,5 +220,26 @@ const styles = StyleSheet.create({
     margin: 10,
     textAlign: 'center',
     fontWeight: '700',
+  },
+  loadingLocation: {
+    backgroundColor: '#22b573',
+    color: '#fff',
+    position: 'absolute',
+    width,
+    height,
+    textAlign: 'center',
+  },
+  loadingText: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginTop: 200,
+  },
+  image: {
+    margin: 12,
+    alignItems: 'center',
+    width: 200,
+    height: 200,
   },
 });
