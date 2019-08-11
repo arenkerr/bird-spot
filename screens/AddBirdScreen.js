@@ -33,7 +33,7 @@ export default class BirdMap extends Component {
       details: '',
       image: null,
       uploading: false,
-      uploadedImage: '',
+      imageURL: '',
     };
     this.getLocation.bind(this);
     this.userOnState.bind(this);
@@ -83,10 +83,9 @@ export default class BirdMap extends Component {
           unknownSpecies: this.state.unknownSpecies,
           details: this.state.details,
           username: username,
-          uploadedImage: this.state.uploadedImage,
+          imageURL: this.state.imageURL,
         };
         const submitted = db.CreateNewDocument('/Markers', newMarker);
-        console.log(newMarker.uploadedImage);
         submitted ? Alert.alert('Submitted!') : Alert.alert('Try again :>');
       } else {
         Alert.alert('Please wait while BirdSpot gets your location');
@@ -115,7 +114,20 @@ export default class BirdMap extends Component {
             </TouchableOpacity>
             {/** Display selected image */}
             {this.state.image && (
-              <Image source={{ uri: this.state.image }} style={styles.image} />
+              <View>
+                <Image
+                  source={{ uri: this.state.image }}
+                  style={styles.image}
+                />
+                <TouchableOpacity
+                  style={styles.btn}
+                  onPress={this.handleUpload}
+                >
+                  <View>
+                    <Text style={styles.btnTxt}>Upload Photo</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
             )}
 
             <Switch
@@ -165,10 +177,23 @@ export default class BirdMap extends Component {
 
     if (!result.cancelled) {
       this.setState({ image: result.uri });
-      const ext = this.state.image.split('.').pop(); // Extract image extension
-      const imageName = `${uuidv1()}.${ext}`; // Generate unique name
-      this.setState({ uploadedImage: imageName });
-      this.uploadImage(this.state.image, imageName);
+    }
+  };
+
+  handleUpload = async () => {
+    const ext = this.state.image.split('.').pop(); // Extract image extension
+    const imageName = `${uuidv1()}.${ext}`; // Generate unique name
+    const uploaded = await this.uploadImage(this.state.image, imageName);
+    if (uploaded) {
+      try {
+        const storage = await firebase.storage().ref();
+        const ref = await storage.child(`birds/${imageName}`);
+        const imageURL = await ref.getDownloadURL();
+        this.setState({ imageURL });
+        console.log(this.state.imageURL);
+      } catch (error) {
+        console.log('Something went wrong :>', error);
+      }
     }
   };
 
