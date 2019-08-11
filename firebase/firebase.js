@@ -55,4 +55,13 @@ export class FirebaseWrapper {
       console.log('Something went wrong! :>', error);
     }
   }
+
+  userOnState = async () => {
+    try {
+      const { user } = await firebase.auth();
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 }
