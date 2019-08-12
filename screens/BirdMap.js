@@ -16,7 +16,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const defaultImage =
-  'https://firebasestorage.googleapis.com/v0/b/bird-spot-d2dd5.appspot.com/o/birds%2F2d3f3240-bc51-11e9-b22f-c198db962aea.jpg?alt=media&token=3f149cc4-2e36-4f2b-bba8-370a5c30f710';
+  'https://firebasestorage.googleapis.com/v0/b/bird-spot-d2dd5.appspot.com/o/birds%2Fpalm-warbler.jpg?alt=media&token=d2f8ca8e-3001-4d92-a6e4-80678b804c4d';
 
 export default class BirdMap extends Component {
   constructor() {

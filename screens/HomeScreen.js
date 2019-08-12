@@ -7,6 +7,7 @@ import {
   Text,
   View,
   Button,
+  TouchableOpacity,
 } from 'react-native';
 import * as firebase from 'firebase';
 import UserBirds from './UserBirds';
@@ -16,11 +17,16 @@ export default class HomeScreen extends Component {
     super();
     this.state = { currentUser: null, username: '' };
     this.userOnState.bind(this);
+    this.setState.bind(this);
   }
 
   componentDidMount() {
     this.userOnState();
   }
+
+  handleButton = () => {
+    this.setState({ myBirds: true });
+  };
 
   userOnState = async () => {
     try {
@@ -45,44 +51,50 @@ export default class HomeScreen extends Component {
                 Welcome, {user.email.split('@')[0]}
               </Text>
             )}
+            <TouchableOpacity style={styles.btn} onPress={this.handleButton}>
+              <Text style={styles.btnTxt}>My Birds</Text>
+            </TouchableOpacity>
           </View>
-          <UserBirds user={user} />
+          {this.state.myBirds && <UserBirds user={user} />}
         </ScrollView>
       </View>
     );
   }
 }
 
-// HomeScreen.navigationOptions = {
-//   header: null,
-// };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#22b573',
     width: '100%',
+    height: '100%',
   },
   topHome: {
     backgroundColor: '#22b573',
     width: '100%',
-    padding: 40,
+    padding: 60,
   },
   contentContainer: {
     paddingTop: 30,
   },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
   heading: {
     color: '#fff',
-    fontSize: 32,
+    fontSize: 38,
     margin: 10,
     textAlign: 'center',
+    fontWeight: '700',
+    fontFamily: 'codec',
+  },
+  btn: {
+    margin: 20,
+    padding: 20,
+    borderRadius: 8,
+    backgroundColor: '#2b8e5f',
+  },
+  btnTxt: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 18,
     fontWeight: '700',
   },
 });

@@ -40,7 +40,7 @@ export default class UserBirds extends Component {
     const user = this.props.user;
 
     return (
-      <View>
+      <View style={styles.container}>
         <Text style={styles.subhead}>Your Birds</Text>
 
         <View>
@@ -81,10 +81,14 @@ export default class UserBirds extends Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     height: '100%',
     width: '100%',
+    backgroundColor: '#2b8e5f',
+    color: '#fff',
+    paddingTop: 40,
   },
   row: {
     margin: 10,
@@ -98,7 +102,9 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 24,
     margin: 10,
-    color: '#22b573',
+    color: '#fff',
+    fontFamily: 'codec',
+    alignSelf: 'center',
   },
   image: {
     height: 120,
@@ -106,11 +112,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: '700',
-    color: '#22b573',
-    fontSize: 18,
+    color: '#fff',
+    fontSize: 20,
     marginBottom: 10,
   },
   details: {
     fontStyle: 'italic',
+    color: '#fff',
+    fontSize: 16,
   },
 });

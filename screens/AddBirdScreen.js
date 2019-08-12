@@ -17,6 +17,8 @@ import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import uuidv1 from 'uuid/v1';
+import { Ionicons } from '@expo/vector-icons';
+import LoadingLocationScreen from './LoadingLocationScreen';
 
 const db = FirebaseWrapper.GetInstance();
 
@@ -101,58 +103,84 @@ export default class BirdMap extends Component {
     return (
       <ScrollView>
         {this.state.isLoading ? (
-          <View style={styles.loadingLocation}>
-            <Text style={styles.loadingText}>Getting location...</Text>
-          </View>
+          <LoadingLocationScreen />
         ) : (
           <View>
-            <Text style={styles.heading}>Add a Bird</Text>
-            <TouchableOpacity style={styles.btn} onPress={this._pickImage}>
-              <View>
-                <Text style={styles.btnTxt}>Select Photo</Text>
-              </View>
-            </TouchableOpacity>
-            {/** Display selected image */}
-            {this.state.image && (
-              <View>
-                <Image
-                  source={{ uri: this.state.image }}
-                  style={styles.image}
-                />
-                <TouchableOpacity
-                  style={styles.btn}
-                  onPress={this.handleUpload}
-                >
-                  <View>
-                    <Text style={styles.btnTxt}>Upload Photo</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            )}
+            <View style={styles.headContainer}>
+              <Text style={styles.heading}>Add a Bird</Text>
+            </View>
 
-            <Switch
-              style={styles.switch}
-              onValueChange={() => this.setState({ unknownSpecies: true })}
-              value={this.state.unknownSpecies}
-            />
-            {!this.state.unknownSpecies && (
+            <View style={styles.formContainer}>
+              <Text style={styles.subheading2} color="#fff">
+                Photo
+              </Text>
+              <TouchableOpacity style={styles.btn} onPress={this._pickImage}>
+                <Ionicons
+                  name="md-camera"
+                  size={30}
+                  color="#fff"
+                  style={styles.icons}
+                />
+              </TouchableOpacity>
+              {/** Display selected image */}
+              {this.state.image && (
+                <View style={styles.formContainer}>
+                  <Image
+                    source={{ uri: this.state.image }}
+                    style={styles.image}
+                  />
+                  <TouchableOpacity
+                    style={styles.btn}
+                    onPress={this.handleUpload}
+                  >
+                    <Text style={styles.btnTxt}>Upload Photo</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+
+            <View style={styles.formContainer}>
+              <Text style={styles.subheading2} color="#fff">
+                Unknown Species?
+              </Text>
+              <View style={{ alignItems: 'center' }}>
+                <Switch
+                  style={styles.switch}
+                  onValueChange={() => this.setState({ unknownSpecies: true })}
+                  value={this.state.unknownSpecies}
+                />
+              </View>
+            </View>
+
+            <View style={styles.formContainer}>
+              {!this.state.unknownSpecies && (
+                <TextInput
+                  placeholder="Species"
+                  style={styles.textInput}
+                  onChangeText={speciesName => this.setState({ speciesName })}
+                />
+              )}
+            </View>
+            <View style={styles.formContainer}>
               <TextInput
-                placeholder="Species"
+                placeholder="Details"
                 style={styles.textInput}
-                onChangeText={speciesName => this.setState({ speciesName })}
+                onChangeText={details => this.setState({ details })}
               />
-            )}
-            <TextInput
-              placeholder="Details: Where was the bird? What was it doing?"
-              style={styles.textInput}
-              onChangeText={details => this.setState({ details })}
-            />
-            <TouchableOpacity
-              style={styles.btn}
-              onPress={() => this.handleSubmit()}
-            >
-              <Text style={styles.btnTxt}>Add Bird</Text>
-            </TouchableOpacity>
+            </View>
+            <View style={styles.formContainer} height="100%">
+              <TouchableOpacity
+                style={styles.btn}
+                onPress={() => this.handleSubmit()}
+              >
+                <Ionicons
+                  name="md-checkmark-circle"
+                  size={30}
+                  color="#fff"
+                  style={styles.icons}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       </ScrollView>
@@ -213,18 +241,47 @@ import Dimensions from 'Dimensions';
 const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  constainer: {
+    height: height,
+    width: width,
+    backgroundColor: '#22b573',
+  },
+  formContainer: {
+    width: width,
+    backgroundColor: '#2b8e5f',
+    alignContent: 'center',
+    color: '#fff',
+    paddingTop: 40,
+  },
+  subheading: {
+    fontSize: 32,
+    margin: 10,
+    marginTop: 40,
+    textAlign: 'center',
+    fontWeight: '700',
+    fontFamily: 'codec',
+    color: '#fff',
+  },
+  subheading2: {
+    fontSize: 32,
+    margin: 10,
+    textAlign: 'center',
+    fontWeight: '700',
+    fontFamily: 'codec',
+    color: '#fff',
+  },
   textInput: {
     padding: 8,
-    height: 40,
+    height: 60,
     width: '90%',
-    borderColor: 'gray',
-    borderWidth: 1,
     margin: 12,
     borderRadius: 8,
+    backgroundColor: '#fff',
+    fontSize: 18,
   },
   switch: {
     margin: 12,
-    backgroundColor: '#000000',
+    alignItems: 'center',
   },
   btn: {
     margin: 12,
@@ -238,13 +295,16 @@ const styles = StyleSheet.create({
   btnTxt: {
     color: '#fff',
     textAlign: 'center',
+    fontSize: 18,
+    fontWeight: '700',
   },
   heading: {
-    color: '#22b573',
+    color: '#fff',
     fontSize: 36,
     margin: 10,
     textAlign: 'center',
     fontWeight: '700',
+    fontFamily: 'codec',
   },
   loadingLocation: {
     backgroundColor: '#22b573',
@@ -266,5 +326,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 200,
     height: 200,
+    borderWidth: 4,
+    borderRadius: 8,
+    borderColor: '#fff',
+    alignSelf: 'center',
+  },
+  headContainer: {
+    backgroundColor: '#22b573',
+    width: '100%',
+    padding: 40,
+  },
+  icons: {
+    alignItems: 'center',
+    textAlign: 'center',
   },
 });

@@ -12,6 +12,6 @@ export default class UserAuth extends Component {
   }
 
   render() {
-    return <Text>Hi</Text>;
+    return <Text>Loading user</Text>;
   }
 }
