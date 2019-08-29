@@ -4,7 +4,7 @@ Bird watching ios application. Users can share photos and details of bird sighti
 
 # Example
 
-<img src="./assets/images/birdSpot-demo.gif">
+<img src="./assets/images/birdspot-demo.gif">
 
 ## Built With
 
