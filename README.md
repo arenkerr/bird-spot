@@ -2,6 +2,10 @@
 
 Bird watching ios application. Users can share photos and details of bird sightings and find bird sightings in their area.
 
+# Example
+
+<img src="./assets/images/birdSpot-demo1.gif">
+
 ## Built With
 
 * [Node.js](https://nodejs.org/en/)
