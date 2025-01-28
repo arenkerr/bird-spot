@@ -16,5 +16,5 @@ Bird watching ios application. Users can share photos and details of bird sighti
 
 ## Author
 
-* **Alana Kerr** 
+* **Aren Kerr** 
 
